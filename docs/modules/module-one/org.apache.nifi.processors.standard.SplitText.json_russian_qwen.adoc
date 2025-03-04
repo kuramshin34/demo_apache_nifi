@@ -1,0 +1,72 @@
+= SplitText 2.2.0
+
+Разделяет текстовый файл на несколько меньших текстовых файлов по границам строк, ограниченных максимальным количеством строк или общей размерностью фрагмента. Каждый выходной разбитый файл будет содержать не более настроенного числа строк или байтов. Если указаны как Line Split Count, так и Maximum Fragment Size, разделение происходит по первому достигнутому пределу. Если первая строка фрагмента превышает Maximum Fragment Size, эта строка будет выведена в отдельный разбитый файл, который превышает настроенное максимальное ограничение размера. Этот компонент также позволяет указать, что каждый разбитый файл должен содержать строки заголовка. Строки заголовка могут быть вычислены либо путем указания количества строк, которые должны составлять заголовок, либо с использованием маркера заголовка для соответствия прочитанным строкам. Если такое соответствие происходит, то соответствующая строка будет рассматриваться как строка заголовка. Имейте в виду, что при первом неудачном совпадении маркера заголовка больше никакие совпадения не будут выполняться, а оставшиеся данные будут анализироваться как обычные строки для данного разбиения. Если после вычисления заголовка данных больше нет, результирующее разделение будет состоять только из строк заголовка.
+
+[horizontal,labelwidth=25,itemwidth=75]
+Ключевые слова::
+split, text
+Входные требования::
+REQUIRED
+Поддерживает конфиденциальные динамические свойства::
+false
+
+
+
+== Свойства
+
+В приведенном ниже списке названия обязательных свойств выделены *жирным шрифтом*.
+
+[cols='a,a,a,a,a,a,a,a',options='header',]
+|===
+|Имя в интерфейсе |Описание |Значение по умолчанию |Возможные значения |Конфиденциальные данные |Сервисный интерфейс |Ограничения языка выражений |Зависимости
+
+|*Line Split Count*
+|The number of lines that will be added to each split file, excluding header lines. A value of zero requires Maximum Fragment Size to be set, and line count will not be considered in determining splits.
+|``
+|
+|Нет
+|
+|Not Supported
+|
+
+|Maximum Fragment Size
+|The maximum size of each split file, including header lines. NOTE: in the case where a single line exceeds this property (including headers, if applicable), that line will be output in a split of its own which exceeds this Maximum Fragment Size setting.
+|``
+|
+|Нет
+|
+|Not Supported
+|
+
+|*Header Line Count*
+|The number of lines that should be considered part of the header; the header lines will be duplicated to all split files
+|`0`
+|
+|Нет
+|
+|Not Supported
+|
+
+|Header Line Marker Characters
+|The first character(s) on the line of the datafile which signifies a header line. This value is ignored when Header Line Count is non-zero. The first line not containing the Header Line Marker Characters and all subsequent lines are considered non-header
+|``
+|
+|Нет
+|
+|Not Supported
+|
+
+|*Remove Trailing Newlines*
+|Whether to remove newlines at the end of each split file. This should be false if you intend to merge the split files later. If this is set to 'true' and a FlowFile is generated that contains only 'empty lines' (i.e., consists only of \r and \n characters), the FlowFile will not be emitted. Note, however, that if header lines are specified, the resultant FlowFile will never be empty as it will consist of the header lines, so a FlowFile may be emitted that contains only the header lines.
+|`true`
+|
+* true footnote:[]
+
+* false footnote:[]
+
+|Нет
+|
+|Not Supported
+|
+
+|===
